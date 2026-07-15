@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class PokemonController extends Controller
 {
-    public function __construct(private PokemonSearcher $searcher)
-    {
-    }
+    public function __construct(private PokemonSearcher $searcher) {}
 
     public function index(Request $request)
     {

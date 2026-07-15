@@ -7,8 +7,7 @@ class PokemonSearcher
     public function __construct(
         private PokemonCacheService $cache,
         private Paginator $paginator,
-    ) {
-    }
+    ) {}
 
     public function search(?string $query, int $page, int $perPage): array
     {

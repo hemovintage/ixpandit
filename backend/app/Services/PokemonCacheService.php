@@ -8,9 +8,7 @@ class PokemonCacheService
 {
     private const TTL = 3600;
 
-    public function __construct(private PokeApiClient $client)
-    {
-    }
+    public function __construct(private PokeApiClient $client) {}
 
     public function allNames(): array
     {
