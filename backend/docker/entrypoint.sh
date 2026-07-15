@@ -9,4 +9,5 @@ if ! grep -q "^APP_KEY=base64" .env 2>/dev/null; then
   php artisan key:generate --force
 fi
 
+cd public
 exec "$@"
