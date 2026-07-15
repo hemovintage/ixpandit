@@ -69,4 +69,13 @@ class PokemonSearchEndpointTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    #[Test]
+    public function it_returns_a_json_validation_error_even_without_a_json_accept_header(): void
+    {
+        $response = $this->get('/api/pokemons?per_page=500');
+
+        $response->assertStatus(422);
+        $response->assertHeader('content-type', 'application/json');
+    }
 }
