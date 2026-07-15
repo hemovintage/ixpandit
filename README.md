@@ -23,25 +23,6 @@ docker compose up --build
 
 No manual `.env` setup is needed — the backend container automatically copies `.env.example` to `.env` and generates the app key on first run.
 
-## How it's put together
-
-**Backend.** I split the PokeAPI logic into a few small classes instead of one big one, mostly to keep each responsibility obviously separate and easy to reason about on its own:
-
-- `PokeApiClient` is the only class that talks to PokeAPI. It fetches the full Pokémon name list, and fetches details (id, sprite) for a batch of names concurrently via `Http::pool()`, rather than one request at a time.
-- `PokemonCacheService` wraps that client with Redis caching (1 hour TTL), and only fetches details for names actually missing from the cache.
-- `Paginator` handles pagination math only — slicing an array, clamping page numbers. It has no knowledge of Pokémon at all, by design.
-- `PokemonSearcher` filters the cached name list by partial, case-insensitive match, then ties pagination and caching together.
-- `PokemonController` stays thin: validate the request, delegate to `PokemonSearcher`, return JSON.
-
-The interesting constraint here is that PokeAPI has no server-side partial-name search, so the backend fetches the full name list once, caches it, and filters in-memory. It only hydrates full details (sprite, id) for whatever's on the current page — not the entire match set — so a broad query doesn't quietly trigger hundreds of extra requests.
-
-**Frontend.** Kept it equally simple — no router, no state library, since the app doesn't need either:
-
-- `services/pokeApi.js` is the only file that calls the backend.
-- `SearchBar.vue` requires at least 3 valid characters (letters, numbers, hyphens — no spaces or symbols) before it will search. Once that's met, it debounces for 300ms before firing automatically; dropping back below 3 characters clears the results instead of leaving stale ones on screen.
-- `PokemonCard.vue`, `PaginationControls.vue`, and `AppFooter.vue` are presentational only.
-- `App.vue` holds the actual state and wires everything together.
-
 ## Running the tests
 
 **Backend** (16 tests):
