@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import SearchBar from './components/SearchBar.vue'
 import PokemonCard from './components/PokemonCard.vue'
 import PaginationControls from './components/PaginationControls.vue'
-import Footer from './components/Footer.vue'
+import AppFooter from './components/AppFooter.vue'
 import { searchPokemon } from './services/pokeApi'
 
 const query = ref('')
@@ -74,7 +74,7 @@ function handleInvalid() {
     </section>
   </main>
 
-  <Footer />
+  <AppFooter />
 </template>
 
 <style scoped>

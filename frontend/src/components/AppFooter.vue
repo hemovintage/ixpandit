@@ -1,6 +1,6 @@
 <template>
   <footer class="app-footer">
-    Hecho por José Pérez | <a href="https://www.linkedin.com/in/joseperezdev/" target="_blank">Linkedin</a> | <a href="https://github.com/hemovintage/ixpandit" target="_blank">Github</a>
+    Hecho por José Pérez | <a href="https://www.linkedin.com/in/jose-perez-dev/" target="_blank">Linkedin</a> | <a href="https://github.com/hemovintage/ixpandit" target="_blank">Github</a>
   </footer>
 </template>
 
