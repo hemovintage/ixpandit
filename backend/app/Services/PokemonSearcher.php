@@ -4,8 +4,10 @@ namespace App\Services;
 
 class PokemonSearcher
 {
-    public function __construct(private PokemonCacheService $cache)
-    {
+    public function __construct(
+        private PokemonCacheService $cache,
+        private Paginator $paginator,
+    ) {
     }
 
     public function search(?string $query, int $page, int $perPage): array
@@ -19,21 +21,12 @@ class PokemonSearcher
                 fn (string $name) => str_contains(strtolower($name), strtolower($query))
             ));
 
-        $total = count($filtered);
-        $lastPage = max(1, (int) ceil($total / $perPage));
-        $page = min($page, $lastPage);
-
-        $pageNames = array_slice($filtered, ($page - 1) * $perPage, $perPage);
-        $details = $this->cache->details($pageNames);
+        $paginated = $this->paginator->paginate($filtered, $page, $perPage);
+        $details = $this->cache->details($paginated['items']);
 
         return [
-            'data' => array_values(array_map(fn (string $name) => $details[$name], $pageNames)),
-            'meta' => [
-                'current_page' => $page,
-                'per_page' => $perPage,
-                'total' => $total,
-                'last_page' => $lastPage,
-            ],
+            'data' => array_values(array_map(fn (string $name) => $details[$name], $paginated['items'])),
+            'meta' => $paginated['meta'],
         ];
     }
 }
